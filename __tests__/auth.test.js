@@ -12,12 +12,12 @@ const request = supertest(server.server);
 describe('testing server for signup', () =>{
   test('should create a user account', async () => {
     const response = await request.post('/signup').send({
-      username: 'seid',
-      password: '2200'
+      username: 'nassir',
+      password: '4298'
     });
     expect(response.status).toEqual(201);
     expect(response.body.password).toBeDefined();
-    expect(response.body.username).toEqual('seid')
+    expect(response.body.username).toEqual('nassir')
   });
 });
 
@@ -47,25 +47,25 @@ describe('testing server for signup assertion requirement', () =>{
 xdescribe('testing server for signin', () =>{
   it('should sign in to a user account', async () => {
 
-    let user = base64.encode('nassir:4298')
-    const response = await request.post('/signin').set('authorization', `Basic ${user}`)
+  //   let user = base64.encode('nassir:4298')
+  //   const response = await request.post('/signin').set('authorization', `Basic ${user}`)
 
-    expect(response.status).toEqual(200);
-   expect(response.body.username).toEqual('nassir')
+  //   expect(response.status).toEqual(200);
+  //  expect(response.body.username).toEqual('nassir')
     
-  //  await request.post('/signup').send({
-  //     username: 'nassir',
-  //     password: '4298'
-  //   }).then(async (data) => {
-  //       let encodedString = base64.encode(`${data.request._data.username}:${data.request._data.password}`)
-  //       const response = await request.post('/signin').set(
-  //         'Authorization', `Basic ${encodedString}`
-          
-  //       );
-  //       expect(response.status).toEqual(200);
-  //       expect(response.body.password).toBeDefined();
-  //       expect(response.body.username).toEqual('nassir')
-  //   });
+   await request.post('/signup').send({
+      username: 'nassir',
+      password: '42981'
+    }).then(async (data) => {
+        let encodedString = base64.encode(`${data.request._data.username}:${data.request._data.password}`)
+        const response = await request.post('/signin').set(
+          'Authorization', `Basic ${encodedString}`
+         
+        );
+        expect(response.status).toEqual(200);
+        expect(response.body.password).toBeDefined();
+        expect(response.body.username).toEqual('nassir')
+    });
   });
 });
 
@@ -73,7 +73,7 @@ xdescribe('testing middleware and requirement assertion', () =>{
   it ('Middleware basic Authentication ', async () => {
 
     const response = await request.post('/signin').set(
-      'Authentication', 
+      'authorization', 
     );
     expect(response.status).toEqual(500);
     expect(response.text.includes('invalid')).toBeTruthy();
