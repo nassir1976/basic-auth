@@ -2,6 +2,13 @@
 
 ## LAB -06 Authentication
 
+- <a href=https://basic-auth1.herokuapp.com/ class=""><span      class="label">go to heroku app </span></a>
+
+- <a href=https://github.com/nassir1976/basic-auth.git class=""><span class="label">go to gitHub </span></a>
+
+- <a href=https://github.com/nassir1976/basic-auth/pull/1 class=""><span class="label"> pull request </span></a> 
+
+
 ## Over-view 
 - Authentication System Phase 1: Deploy an Express server that implements Basic Authentication, with signup and signin capabilities, using a Mongo database for storage.
 
@@ -35,3 +42,9 @@
    To test signin, your tests actually need to create a user first, then try and login, so there’s a dependency built in
 
 - Ensure that you use supergoose to test your routes and your database
+
+
+### Documentation
+- Compose a UML or Process/Data Flow Diagram for every application
+
+![WhiteBoard](./lab-06.png)
