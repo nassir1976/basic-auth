@@ -33,7 +33,7 @@ else{
 }
 
 function signin(req, res, next){
-  console.log('nassir')
+  console.log('signin')
  const userFromDB = req.params.userFromDB
  console.log('from mongoose', req.body)
   res.status(200).json({ user: req.user});
