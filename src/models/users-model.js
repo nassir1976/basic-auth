@@ -12,10 +12,10 @@ const bcrypt = require('bcrypt')
 });
 
 
-const  UserModel = mongoose.model('users', userSchema);
+const  User = mongoose.model('users', userSchema);
 
 
-module.exports = UserModel;
+module.exports = User;
 
 
 

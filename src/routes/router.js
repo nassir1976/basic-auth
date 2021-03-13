@@ -3,42 +3,44 @@
  
  const bcrypt = require('bcrypt') // encryption for saving pw to the DB
  const base64 = require('base-64') // encoding for passing over the internet
- const UserModel = require('../models/users-model.js')
+ const User = require('../models/users-model.js')
  const basicAuth = require('../middleware/basicAuth.js')
  
 
  const router = express.Router()
 
-router.post('/signup', signup)
-router.post('/signin', basicAuth, signin)
+router.post('/signup', async (req, res) => {
+  try {
+     req.body.password = await bcrypt.hash(req.body.password, 5);
+    const user = new User(req.body);
+    console.log('after instantiation of model:', user);
+    const record = await user.save(req.body);
+    console.log('after saving the record in the db', record);
+    res.status(200).json(record); 
+  } catch {
+    res.status(500).send("Need username");
+  }
+});
 
-async function signup(req, res) {
-  // try {
-  //   const user = new UserModel(req.body);
-  //   const record = await user.save(req.body)
-  //   console.log('ss', user)
-  //   res.status(201).json(record)
-  // }catch(error){res.status(403).send ('error to create user');}
-  if(!req.body.username){res.status(500).send('Need username')}
-  else if(!req.body.password){res.status(500).send('Need password')}
-else{
-  let password = req.body.password
-  let username = req.body.username
-   let encryptedPassword = await bcrypt.hash(password, 5)
-   const user = new UserModel({username:username, password:encryptedPassword})
-   const record = await user.save({username:username,password:encryptedPassword})
-   
-    res.status(201).json(record)
-}
-}
+// SIGN IN will pull the username:password off of a "authorization" header
 
-function signin(req, res, next){
-  console.log('signin')
- const userFromDB = req.params.userFromDB
- console.log('from mongoose', req.body)
-  res.status(200).json({ user: req.user});
-}
+router.post('/signin', async (req, res) => {
+  let basicAuthParts = req.headers.authorization.split(' ') // authorization '2u98432:023j0jwf -> ['basic', 
+  let encodedUser = basicAuthParts.pop(); // username:password as base64 -> 2u98432:023j0jwf
+  let decoded = base64.decode(encodedUser); // username:password
+  let [username, password] = decoded.split(':'); // split at the : (username, password)
 
+  try {
+    const user = await User.findOne({ username: username })
+    console.log('user after saved', user);
+    const valid = await bcrypt.compare(password, user.password);
+  if (valid) {
+      res.status(200).json({ loggedIn: true });
+    }
+  } catch {
+      console.error('user could not be retrieved');
+  }
+});
 
 
 
